@@ -3,28 +3,23 @@ package repositories
 
 import (
 	"context"
+	"github.com/colibri-project-io/colibri-sdk-go/pkg/database/sqlDB"
 
 	"github.com/adrianomr/investments/src/domain/models"
 )
 
-var (
-	memoryList = []models.Investment{
-		{ID: 1, Name: "Investment 1"},
-		{ID: 2, Name: "Investment 2"},
-		{ID: 3, Name: "Investment 3"},
-	}
-)
-
-type InvestmentRepository interface {
-	FindAll(ctx context.Context) ([]models.Investment, error)
+type CdbOrderRepository interface {
+	Create(ctx context.Context, cdbOrder *models.CdbOrder) (*models.CdbOrder, error)
 }
 
-type InvestmentDBRepository struct{}
+type CdbOrderDBRepository struct{}
 
-func NewInvestmentMemoryRepository() *InvestmentDBRepository {
-	return &InvestmentDBRepository{}
+func NewInvestmentMemoryRepository() CdbOrderRepository {
+	return &CdbOrderDBRepository{}
 }
 
-func (r *InvestmentDBRepository) FindAll(_ context.Context) ([]models.Investment, error) {
-	return memoryList, nil
+func (r *CdbOrderDBRepository) Create(ctx context.Context, cdbOrder *models.CdbOrder) (*models.CdbOrder, error) {
+	query := "insert into cdb_order (id, user_id, type, amount) values ($1, $2, $3, $4)"
+	sqlDB.NewStatement(ctx, query, cdbOrder.ID, cdbOrder.UserID, cdbOrder.Type, cdbOrder.Amount).Execute()
+	return cdbOrder, nil
 }
