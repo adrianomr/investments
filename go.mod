@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/colibri-project-io/colibri-sdk-go v0.0.3
-	github.com/golang/mock v1.1.1
+	github.com/google/uuid v1.5.0
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/mock v0.4.0
 )
@@ -44,7 +44,6 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
-	github.com/google/uuid v1.5.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.1 // indirect
 	github.com/googleapis/gax-go/v2 v2.12.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.0 // indirect

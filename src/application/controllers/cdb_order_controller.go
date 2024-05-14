@@ -21,10 +21,10 @@ func NewCdbController() *CdbController {
 func (c *CdbController) Routes() []restserver.Route {
 	return []restserver.Route{
 		{
-			URI:      "cdb",
-			Method:   http.MethodGet,
+			URI:      "/cdbs/orders",
+			Method:   http.MethodPost,
 			Function: c.CreateCdb,
-			Prefix:   restserver.PublicApi,
+			Prefix:   restserver.AuthenticatedApi,
 		},
 	}
 }
@@ -37,7 +37,7 @@ func (c *CdbController) Routes() []restserver.Route {
 // @Param X-AccountantId header uint64 true "id da contabilidade" minimum(0)
 // @Param X-TenantId header uint64 true "id do dono do negócio" minimum(0)
 // @Param X-UserId header uint64 true "id do usuário" minimum(0)
-// @Router /private-api/rest/cdb [get]
+// @Router /api/cdbs/orders [get]
 func (c *CdbController) CreateCdb(ctx restserver.WebContext) {
 	userId := ctx.AuthenticationContext().GetUserID()
 	order := &models.CdbOrder{}
@@ -48,5 +48,5 @@ func (c *CdbController) CreateCdb(ctx restserver.WebContext) {
 		ctx.ErrorResponse(http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JsonResponse(http.StatusOK, result)
+	ctx.JsonResponse(http.StatusCreated, result)
 }

@@ -1,4 +1,4 @@
-//go:generate mockgen -source investment_repository.go -destination mock/investment_repository_mock.go -package mock
+//go:generate mockgen -source cdb_order_repository.go -destination mock/cdb_order_repository_mock.go -package mock
 package repositories
 
 import (
@@ -14,7 +14,7 @@ type CdbOrderRepository interface {
 
 type CdbOrderDBRepository struct{}
 
-func NewInvestmentMemoryRepository() CdbOrderRepository {
+func NewCdbOrderRepository() CdbOrderRepository {
 	return &CdbOrderDBRepository{}
 }
 

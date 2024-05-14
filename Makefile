@@ -39,6 +39,7 @@ install-go:
 	go version
 
 install-binaries:
+	go version
 	go install github.com/swaggo/swag/cmd/swag@latest
 	go install go.uber.org/mock/mockgen@latest
 	swag --version

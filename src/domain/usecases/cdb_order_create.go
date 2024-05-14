@@ -1,4 +1,4 @@
-//go:generate mockgen -source investment_get_all.go -destination mock/investment_get_all_mock.go -package mock
+//go:generate mockgen -source cdb_order_create.go -destination mock/cdb_order_create_mock.go -package mock
 package usecases
 
 import (
@@ -14,7 +14,7 @@ type ICdbOrderCreate interface {
 }
 
 func NewCdbOrderCreate() ICdbOrderCreate {
-	return &CdbOrderCreate{Repo: repositories.NewInvestmentMemoryRepository()}
+	return &CdbOrderCreate{Repo: repositories.NewCdbOrderRepository()}
 }
 
 type CdbOrderCreate struct {

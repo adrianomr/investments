@@ -2,7 +2,7 @@ package usecases
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"testing"
 
 	"github.com/adrianomr/investments/src/domain/models"
@@ -13,35 +13,33 @@ import (
 )
 
 func TestNewInvestmentGetAll(t *testing.T) {
-	uc := usecases.NewInvestmentGetAll()
+	uc := usecases.NewCdbOrderCreate()
 	assert.NotNil(t, uc)
 }
 
 func TestInvestmentGetAll(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	repo := mock.NewMockInvestmentRepository(ctrl)
-	uc := usecases.InvestmentGetAll{Repo: repo}
+	repo := mock.NewMockCdbOrderRepository(ctrl)
+	uc := usecases.CdbOrderCreate{Repo: repo}
 
-	t.Run("success", func(t *testing.T) {
+	t.Run("should create order", func(t *testing.T) {
 		ctx := context.Background()
-		expected := []models.Investment{
-			{ID: 1, Name: "1"},
-			{ID: 2, Name: "2"},
-		}
-		repo.EXPECT().FindAll(ctx).Return(expected, nil)
+		order := &models.CdbOrder{}
+		repo.EXPECT().Create(ctx, order).Return(order, nil)
 
-		result, err := uc.Execute(context.Background())
+		result, err := uc.Execute(context.Background(), order)
 		assert.NoError(t, err)
 		assert.NotNil(t, result)
-		assert.Equal(t, expected, result)
+		assert.Equal(t, order, result)
 	})
 
-	t.Run("fail", func(t *testing.T) {
+	t.Run("should fail when error on db", func(t *testing.T) {
 		ctx := context.Background()
-		repo.EXPECT().FindAll(ctx).Return(nil, fmt.Errorf("could not find"))
+		order := &models.CdbOrder{}
+		repo.EXPECT().Create(ctx, order).Return(nil, errors.New("DB error"))
 
-		result, err := uc.Execute(context.Background())
+		_, err := uc.Execute(context.Background(), order)
 		assert.Error(t, err)
-		assert.Empty(t, result)
 	})
+
 }

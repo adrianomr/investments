@@ -17,6 +17,6 @@ func init() {
 }
 
 func main() {
-	restserver.AddRoutes(controllers.NewInvestmentsController().Routes())
+	restserver.AddRoutes(controllers.NewCdbController().Routes())
 	restserver.ListenAndServe()
 }
