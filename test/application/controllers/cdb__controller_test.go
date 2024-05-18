@@ -21,19 +21,20 @@ func TestAppController(t *testing.T) {
 
 func TestShouldCreateCdbOrder(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	create := mock.NewMockICdbOrderCreate(ctrl)
-	restController := controllers.CdbController{Create: create}
+	create := mock.NewMockICdbCreate(ctrl)
+	createOrder := mock.NewMockICdbOrderCreate(ctrl)
+	restController := controllers.CdbController{Create: create, CreateOrder: createOrder}
 	defer ctrl.Finish()
 
 	t.Run("Should create cdb order", func(t *testing.T) {
 
-		create.EXPECT().Execute(gomock.Any(), gomock.Any()).Return(nil, nil)
+		createOrder.EXPECT().Execute(gomock.Any(), gomock.Any()).Return(nil, nil)
 
 		resp := restserver.NewRequestTest(&restserver.RequestTest{
 			Method: http.MethodPost,
 			Url:    "/api/cdbs/orders",
 			Path:   "/api/cdbs/orders",
-		}, restController.CreateCdb)
+		}, restController.CreateCdbOrder)
 
 		assert.Equal(t, http.StatusCreated, resp.StatusCode())
 	})

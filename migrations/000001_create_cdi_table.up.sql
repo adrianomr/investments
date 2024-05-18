@@ -23,10 +23,20 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TABLE cdi (
+CREATE TABLE cdb (
     id UUID NOT NULL,
     user_id TEXT,
     amount NUMERIC(15, 2),
     cdi_percentage NUMERIC(15, 2),
     investment_type TEXT NOT NULL
 );
+
+CREATE TABLE cdb_order (
+    id UUID NOT NULL,
+    user_id TEXT,
+    amount NUMERIC(15, 2),
+    order_type TEXT NOT NULL,
+    cdb_id UUID NOT NULL
+);
+
+
