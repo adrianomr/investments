@@ -17,10 +17,10 @@ func TestCreateAndFindCdb(t *testing.T) {
 		err := pc.Dataset(basePath, datasets...)
 		assert.NoError(t, err)
 		cdb := &models.Cdb{
-			ID:             uuid.New(),
-			UserID:         "1",
-			Percentage:     0.5,
-			InvestmentType: models.CdbInvestmentTypeCdi,
+			ID:         uuid.New(),
+			UserID:     "1",
+			Percentage: 0.5,
+			Type:       models.CdbInvestmentTypeCdi,
 		}
 
 		err = repository.Create(context.Background(), cdb)

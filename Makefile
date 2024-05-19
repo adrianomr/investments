@@ -7,10 +7,10 @@ mock:
 	go generate -v ./...
 
 test: mock
-	go test ./... --coverprofile coverage.out
+	go-acc -o coverage.txt ./...
 
 cover:
-	go tool cover -html coverage.out
+	go tool cover -html coverage.txt
 
 run:
 	go run main.go

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"go.uber.org/mock/gomock"
 	"net/http"
 	"testing"
@@ -75,6 +76,20 @@ func TestCreateCdbOrder(t *testing.T) {
 		assert.Equal(t, http.StatusBadRequest, resp.StatusCode())
 	})
 
+	t.Run("Should fail to create cdb order when usecase failed", func(t *testing.T) {
+
+		createOrder.EXPECT().Execute(gomock.Any(), gomock.Any()).Return(nil, errors.New("usecase error"))
+
+		resp := restserver.NewRequestTest(&restserver.RequestTest{
+			Method: http.MethodPost,
+			Url:    "/api/cdbs/b0dae81c-e55c-4ca8-b635-2f3087d6b590/orders",
+			Path:   "/api/cdbs/{cdb_id}/orders",
+			Body:   "{\"amount\": 150.55, \"type\": \"BUY\"}",
+		}, restController.CreateCdbOrder)
+
+		assert.Equal(t, http.StatusInternalServerError, resp.StatusCode())
+	})
+
 	t.Run("Should create cdb order", func(t *testing.T) {
 
 		createOrder.EXPECT().Execute(gomock.Any(), gomock.Any()).Return(nil, nil)
@@ -106,6 +121,20 @@ func TestCreateCdb(t *testing.T) {
 		}, restController.CreateCdb)
 
 		assert.Equal(t, http.StatusBadRequest, resp.StatusCode())
+	})
+
+	t.Run("Should fail to create cdb when usecase failed", func(t *testing.T) {
+
+		create.EXPECT().Execute(gomock.Any(), gomock.Any()).Return(nil, errors.New("usecase error"))
+
+		resp := restserver.NewRequestTest(&restserver.RequestTest{
+			Method: http.MethodPost,
+			Url:    "/api/cdbs",
+			Path:   "/api/cdbs",
+			Body:   "{\"percentage\": 0.5, \"type\": \"cdi\"}",
+		}, restController.CreateCdb)
+
+		assert.Equal(t, http.StatusInternalServerError, resp.StatusCode())
 	})
 
 	t.Run("Should create cdb", func(t *testing.T) {

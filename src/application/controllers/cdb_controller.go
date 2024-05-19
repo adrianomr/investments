@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"errors"
 	"github.com/adrianomr/investments/src/domain/models"
 	"github.com/google/uuid"
 	"net/http"
@@ -75,11 +74,7 @@ func (c *CdbController) CreateCdb(ctx restserver.WebContext) {
 // @Router /cdbs/{cdb_id}/orders [get]
 func (c *CdbController) CreateCdbOrder(ctx restserver.WebContext) {
 	userId := ctx.AuthenticationContext().GetUserID()
-	if userId == "" {
-		ctx.ErrorResponse(http.StatusBadRequest, errors.New("invalid user"))
-		return
-	}
-	cdb_id, err := uuid.Parse(ctx.PathParam("cdb_id"))
+	cdbId, err := uuid.Parse(ctx.PathParam("cdb_id"))
 	if err != nil {
 		ctx.ErrorResponse(http.StatusBadRequest, err)
 		return
@@ -92,7 +87,7 @@ func (c *CdbController) CreateCdbOrder(ctx restserver.WebContext) {
 		return
 	}
 	order.UserID = userId
-	order.CdbId = cdb_id
+	order.CdbId = cdbId
 
 	result, err := c.CreateOrder.Execute(ctx.Context(), order)
 
