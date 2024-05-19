@@ -4,12 +4,14 @@ package repositories
 import (
 	"context"
 	"github.com/colibri-project-io/colibri-sdk-go/pkg/database/sqlDB"
+	"github.com/google/uuid"
 
 	"github.com/adrianomr/investments/src/domain/models"
 )
 
 type CdbOrderRepository interface {
-	Create(ctx context.Context, cdbOrder *models.CdbOrder) (*models.CdbOrder, error)
+	FindById(ctx context.Context, id uuid.UUID) (*models.CdbOrder, error)
+	Create(ctx context.Context, cdbOrder *models.CdbOrder) error
 }
 
 type CdbOrderDBRepository struct{}
@@ -18,8 +20,12 @@ func NewCdbOrderRepository() CdbOrderRepository {
 	return &CdbOrderDBRepository{}
 }
 
-func (r *CdbOrderDBRepository) Create(ctx context.Context, cdbOrder *models.CdbOrder) (*models.CdbOrder, error) {
-	query := "insert into cdb_order (id, user_id, type, amount) values ($1, $2, $3, $4)"
-	sqlDB.NewStatement(ctx, query, cdbOrder.ID, cdbOrder.UserID, cdbOrder.Type, cdbOrder.Amount).Execute()
-	return cdbOrder, nil
+func (r *CdbOrderDBRepository) FindById(ctx context.Context, id uuid.UUID) (*models.CdbOrder, error) {
+	query := "select id, user_id, type, amount, cdb_id from cdb_order where id = $1"
+	return sqlDB.NewQuery[models.CdbOrder](ctx, query, id).One()
+}
+
+func (r *CdbOrderDBRepository) Create(ctx context.Context, cdbOrder *models.CdbOrder) error {
+	query := "insert into cdb_order (id, user_id, type, amount, cdb_id) values ($1, $2, $3, $4, $5)"
+	return sqlDB.NewStatement(ctx, query, cdbOrder.ID, cdbOrder.UserID, cdbOrder.Type, cdbOrder.Amount, cdbOrder.CdbId).Execute()
 }

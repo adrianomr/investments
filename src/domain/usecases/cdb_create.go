@@ -23,5 +23,5 @@ type CdbCreate struct {
 
 func (uc *CdbCreate) Execute(ctx context.Context, cdb *models.Cdb) (*models.Cdb, error) {
 	cdb.ID = uuid.New()
-	return uc.Repo.Create(ctx, cdb)
+	return cdb, uc.Repo.Create(ctx, cdb)
 }

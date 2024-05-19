@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"errors"
 	"github.com/adrianomr/investments/src/domain/models"
+	"github.com/google/uuid"
 	"net/http"
 
 	"github.com/adrianomr/investments/src/domain/usecases"
@@ -46,10 +48,17 @@ func (c *CdbController) Routes() []restserver.Route {
 // @Router /cdbs/{cdb_id}/orders [get]
 func (c *CdbController) CreateCdb(ctx restserver.WebContext) {
 	userId := ctx.AuthenticationContext().GetUserID()
+
 	cdb := &models.Cdb{}
-	ctx.DecodeBody(cdb)
+	err := ctx.DecodeBody(cdb)
+	if err != nil {
+		ctx.ErrorResponse(http.StatusBadRequest, err)
+		return
+	}
 	cdb.UserID = userId
+
 	result, err := c.Create.Execute(ctx.Context(), cdb)
+
 	if err != nil {
 		ctx.ErrorResponse(http.StatusInternalServerError, err)
 		return
@@ -66,10 +75,27 @@ func (c *CdbController) CreateCdb(ctx restserver.WebContext) {
 // @Router /cdbs/{cdb_id}/orders [get]
 func (c *CdbController) CreateCdbOrder(ctx restserver.WebContext) {
 	userId := ctx.AuthenticationContext().GetUserID()
+	if userId == "" {
+		ctx.ErrorResponse(http.StatusBadRequest, errors.New("invalid user"))
+		return
+	}
+	cdb_id, err := uuid.Parse(ctx.PathParam("cdb_id"))
+	if err != nil {
+		ctx.ErrorResponse(http.StatusBadRequest, err)
+		return
+	}
+
 	order := &models.CdbOrder{}
-	ctx.DecodeBody(order)
+	err = ctx.DecodeBody(order)
+	if err != nil {
+		ctx.ErrorResponse(http.StatusBadRequest, err)
+		return
+	}
 	order.UserID = userId
+	order.CdbId = cdb_id
+
 	result, err := c.CreateOrder.Execute(ctx.Context(), order)
+
 	if err != nil {
 		ctx.ErrorResponse(http.StatusInternalServerError, err)
 		return

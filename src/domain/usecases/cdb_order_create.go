@@ -23,5 +23,5 @@ type CdbOrderCreate struct {
 
 func (uc *CdbOrderCreate) Execute(ctx context.Context, order *models.CdbOrder) (*models.CdbOrder, error) {
 	order.ID = uuid.New()
-	return uc.Repo.Create(ctx, order)
+	return order, uc.Repo.Create(ctx, order)
 }
