@@ -17,3 +17,11 @@ type Cdb struct {
 	Percentage float64   `json:"percentage" validate:"required"`
 	Type       CdbType   `json:"type" validate:"required"`
 }
+
+func (c *Cdb) Update(cdis []Cdi, orders []CdbOrder) {
+	c.Amount = 0
+	for _, order := range orders {
+		c.Amount += order.Amount
+	}
+
+}

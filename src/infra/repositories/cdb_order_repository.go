@@ -12,6 +12,7 @@ import (
 type CdbOrderRepository interface {
 	FindById(ctx context.Context, id uuid.UUID) (*models.CdbOrder, error)
 	Create(ctx context.Context, cdbOrder *models.CdbOrder) error
+	FindAllByCdbId(ctx context.Context, id uuid.UUID) ([]models.CdbOrder, error)
 }
 
 type CdbOrderDBRepository struct{}
@@ -28,4 +29,9 @@ func (r *CdbOrderDBRepository) FindById(ctx context.Context, id uuid.UUID) (*mod
 func (r *CdbOrderDBRepository) Create(ctx context.Context, cdbOrder *models.CdbOrder) error {
 	query := "insert into cdb_order (id, user_id, type, amount, cdb_id) values ($1, $2, $3, $4, $5)"
 	return sqlDB.NewStatement(ctx, query, cdbOrder.ID, cdbOrder.UserID, cdbOrder.Type, cdbOrder.Amount, cdbOrder.CdbId).Execute()
+}
+
+func (r *CdbOrderDBRepository) FindAllByCdbId(ctx context.Context, id uuid.UUID) ([]models.CdbOrder, error) {
+	query := "select id, user_id, type, amount, cdb_id from cdb_order where cdb_id = $1"
+	return sqlDB.NewQuery[models.CdbOrder](ctx, query, id).Many()
 }

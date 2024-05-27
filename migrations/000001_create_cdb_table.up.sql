@@ -30,21 +30,22 @@ LANGUAGE plpgsql;
 
 CREATE TABLE cdb
 (
-    id              UUID           NOT NULL PRIMARY KEY,
-    user_id         TEXT           NOT NULL,
-    amount          NUMERIC(15, 2) NOT NULL DEFAULT 0,
-    percentage      NUMERIC(15, 2) NOT NULL,
-    investment_type TEXT           NOT NULL
+    id              UUID                     NOT NULL PRIMARY KEY,
+    user_id         TEXT                     NOT NULL,
+    amount          NUMERIC(15, 2)           NOT NULL DEFAULT 0,
+    percentage      NUMERIC(15, 2)           NOT NULL,
+    investment_type TEXT                     NOT NULL,
+    last_updated     TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 
 CREATE TABLE cdb_order
 (
-    id         UUID           NOT NULL PRIMARY KEY,
-    user_id    TEXT           NOT NULL,
-    amount     NUMERIC(15, 2) NOT NULL DEFAULT 0,
-    type TEXT           NOT NULL,
-    cdb_id     UUID           NOT NULL
+    id      UUID           NOT NULL PRIMARY KEY,
+    user_id TEXT           NOT NULL,
+    amount  NUMERIC(15, 2) NOT NULL DEFAULT 0,
+    type    TEXT           NOT NULL,
+    cdb_id  UUID           NOT NULL
 );
 
 ALTER TABLE cdb_order

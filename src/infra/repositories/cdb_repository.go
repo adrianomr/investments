@@ -12,6 +12,7 @@ import (
 type CdbRepository interface {
 	FindById(ctx context.Context, id uuid.UUID) (*models.Cdb, error)
 	Create(ctx context.Context, cdb *models.Cdb) error
+	FindCdbsToUpdate(ctx context.Context) ([]models.Cdb, error)
 }
 
 type CdbDBRepository struct{}
@@ -28,4 +29,9 @@ func (r *CdbDBRepository) Create(ctx context.Context, cdb *models.Cdb) error {
 func (r *CdbDBRepository) FindById(ctx context.Context, id uuid.UUID) (*models.Cdb, error) {
 	query := "select id, user_id, amount, percentage, investment_type from cdb where id = $1"
 	return sqlDB.NewQuery[models.Cdb](ctx, query, id).One()
+}
+
+func (r *CdbDBRepository) FindCdbsToUpdate(ctx context.Context) ([]models.Cdb, error) {
+	query := "select id, user_id, amount, percentage, investment_type from cdb where DATE(last_updated) < CURRENT_DATE"
+	return sqlDB.NewQuery[models.Cdb](ctx, query).Many()
 }
