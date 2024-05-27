@@ -1,0 +1,6 @@
+CREATE TABLE cdi
+(
+    id   UUID           NOT NULL PRIMARY KEY,
+    rate NUMERIC(15, 2) NOT NULL,
+    date TIMESTAMP WITH TIME ZONE NOT NULL
+);
