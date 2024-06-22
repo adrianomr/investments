@@ -28,7 +28,7 @@ func (u CdbsUpdate) Execute() {
 		if err != nil {
 			log.Errorf("Failed to find cdis: %v", err)
 		}
-		cdb.Update(cdis, orders)
+		cdb.Update(cdis, orders, time.Now())
 	}
 }
 func (u CdbsUpdate) ExecuteAfter() time.Duration {

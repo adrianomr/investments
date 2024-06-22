@@ -4,6 +4,7 @@ go 1.21
 
 require (
 	github.com/colibri-project-io/colibri-sdk-go v0.0.3
+	github.com/gofiber/fiber/v2 v2.52.1
 	github.com/google/uuid v1.5.0
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/mock v0.4.0
@@ -49,7 +50,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.15.5 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
-	github.com/gofiber/fiber/v2 v2.52.1 // indirect
 	github.com/gofiber/swagger v0.1.14 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-migrate/migrate/v4 v4.16.2 // indirect

@@ -46,3 +46,10 @@ _Check if `.env` file exists on root folder._
 ```shell
 ./application
 ```
+
+FINANCIAL DATA
+https://github.com/Tpessia/dados-financeiros?tab=readme-ov-file
+
+CDBS data
+
+https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json
